@@ -53,3 +53,31 @@ print(df.duplicated().sum())
 # Muestra un resumen estadístico de las variables del dataset.
 print("\nEstadísticas descriptivas:")
 print(df.describe(include="all"))
+
+# Limpieza y preprocesamiento
+# --------------------------
+
+print("\n2. LIMPIEZA Y PREPROCESAMIENTO")
+
+# Age: se usa la mediana para completar las edades faltantes.
+# La mediana se ve menos afectada por valores extremos que el promedio
+# y permite conservar los registros que no tienen una edad registrada.
+age_median = df["Age"].median()
+df["Age"] = df["Age"].fillna(age_median)
+
+# Embarked: se usa la moda porque representa el puerto de embarque
+# que aparece con mayor frecuencia en el dataset.
+embarked_mode = df["Embarked"].mode()[0]
+df["Embarked"] = df["Embarked"].fillna(embarked_mode)
+
+# Cabin tiene una gran cantidad de datos faltantes.
+# En vez de inventar una cabina, se crea una variable que indica
+# solamente si la información de la cabina está disponible.
+df["CabinKnown"] = df["Cabin"].notna().map({True: "Sí", False: "No"})
+
+print(f"\nMediana utilizada para completar Age: {age_median}")
+print(f"Moda utilizada para completar Embarked: {embarked_mode}")
+
+# Se vuelven a revisar estas columnas para comprobar el tratamiento realizado.
+print("\nValores faltantes después del tratamiento:")
+print(df[["Age", "Cabin", "Embarked"]].isnull().sum())
