@@ -54,6 +54,7 @@ print(df.duplicated().sum())
 print("\nEstadísticas descriptivas:")
 print(df.describe(include="all"))
 
+
 # Limpieza y preprocesamiento
 # --------------------------
 
@@ -81,6 +82,7 @@ print(f"Moda utilizada para completar Embarked: {embarked_mode}")
 # Se vuelven a revisar estas columnas para comprobar el tratamiento realizado.
 print("\nValores faltantes después del tratamiento:")
 print(df[["Age", "Cabin", "Embarked"]].isnull().sum())
+
 
 # Creación de nuevas variables
 # ---------------------------
@@ -163,3 +165,94 @@ survival_by_travel = df.groupby(
 
 print("\nANÁLISIS 5: Supervivencia al viajar solo o acompañado:")
 print(survival_by_travel.round(2))
+
+
+# Visualizaciones
+# ---------------
+
+print("\n5. GENERANDO VISUALIZACIONES")
+
+# Gráfica 1: permite comparar visualmente la supervivencia según sexo.
+plt.figure(figsize=(7, 5))
+survival_by_sex.plot(kind="bar")
+plt.title("Porcentaje de supervivencia según sexo")
+plt.xlabel("Sexo")
+plt.ylabel("Supervivencia (%)")
+plt.xticks(rotation=0)
+plt.tight_layout()
+plt.savefig(OUTPUT_DIR / "supervivencia_por_sexo.png")
+plt.close()
+
+
+# Gráfica 2: compara la supervivencia entre las tres clases de pasajeros.
+plt.figure(figsize=(7, 5))
+survival_by_class.plot(kind="bar")
+plt.title("Porcentaje de supervivencia según clase")
+plt.xlabel("Clase del pasajero")
+plt.ylabel("Supervivencia (%)")
+plt.xticks(rotation=0)
+plt.tight_layout()
+plt.savefig(OUTPUT_DIR / "supervivencia_por_clase.png")
+plt.close()
+
+
+# Gráfica 3: muestra las diferencias de supervivencia entre grupos de edad.
+plt.figure(figsize=(8, 5))
+survival_by_age.plot(kind="bar")
+plt.title("Porcentaje de supervivencia según grupo de edad")
+plt.xlabel("Grupo de edad")
+plt.ylabel("Supervivencia (%)")
+plt.xticks(rotation=0)
+plt.tight_layout()
+plt.savefig(OUTPUT_DIR / "supervivencia_por_edad.png")
+plt.close()
+
+
+# Gráfica 4: compara a quienes viajaban solos con quienes iban acompañados.
+plt.figure(figsize=(7, 5))
+survival_by_travel.plot(kind="bar")
+plt.title("Supervivencia: solo vs. acompañado")
+plt.xlabel("Forma de viaje")
+plt.ylabel("Supervivencia (%)")
+plt.xticks(rotation=0)
+plt.tight_layout()
+plt.savefig(OUTPUT_DIR / "supervivencia_viaje.png")
+plt.close()
+
+print("\nSe generaron 4 gráficas en la carpeta outputs.")
+
+
+# Conclusiones
+# ------------
+
+print("\n6. CONCLUSIONES")
+
+print(
+    f"""
+1. El {survival_percentage:.2f}% de los pasajeros incluidos en el
+   dataset sobrevivió.
+
+2. Las mujeres presentan un porcentaje de supervivencia mayor
+   que los hombres en los datos analizados.
+
+3. La supervivencia cambia según la clase del pasajero, por lo
+   que se observan diferencias entre las clases.
+
+4. También existen diferencias en la supervivencia entre los
+   distintos grupos de edad.
+
+5. Al comparar a quienes viajaban solos con quienes viajaban
+   acompañados, se observan diferencias en sus porcentajes de
+   supervivencia.
+
+Estas conclusiones describen asociaciones observadas en el dataset
+y no demuestran relaciones de causa y efecto.
+"""
+)
+
+# Finalmente se guarda una copia del dataset con la limpieza
+# y las nuevas variables creadas durante el análisis.
+df.to_csv(OUTPUT_DIR / "titanic_procesado.csv", index=False)
+
+print("Dataset procesado guardado en outputs/titanic_procesado.csv")
+print("\nANÁLISIS COMPLETADO CORRECTAMENTE.")
